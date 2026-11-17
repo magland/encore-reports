@@ -1,3 +1,4 @@
+--find-links https://flatironinstitute.github.io/figpack/wheels/
 dandi==0.81.0
 h5py==3.16.0
 numpy==2.5.4
@@ -7,6 +8,7 @@ requests
 scipy==1.18.1
 matplotlib
 figpack==0.4.5
+figpack_experimental==0.1.21
 markdown==3.11.3
 psychofit==1.0.0.post0
 pyarrow

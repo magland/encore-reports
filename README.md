@@ -33,6 +33,10 @@ A report uses a static plot where interaction would add nothing (a histogram, a 
 
 GitHub does not render iframes in markdown, so on GitHub the image stands in for the figure. The site at https://magland.github.io/encore-reports/ is built from the same markdown by `tools/build_site.py` (run by `.github/workflows/pages.yml` on every push to `main`): each image that links to a figpack figure is replaced by the embedded figure, at the `height` given for it in `figures.json` (default 650 px), and links to figures open in a new tab. To build it locally: `.venv/bin/python tools/build_site.py` (writes `_site/`).
 
+## License
+
+The code and reports in this repository are under the Apache License 2.0 (`LICENSE`). Code copied from the Encore registry keeps its own license notice (`LICENSE-encore` in each paper's directory), and the Encore records the reports draw on are CC0.
+
 ## Setup
 
 ```bash
@@ -40,4 +44,4 @@ uv venv .venv
 uv pip install --python .venv/bin/python -r requirements.txt
 ```
 
-The figures use views from `figpack_experimental`. Until the `LinkedTrajectories` view is released, install it from the figpack branch `linked-trajectories` (`extension_packages/figpack_experimental`, after `npm install && npm run build`). Uploading needs `FIGPACK_API_KEY` in the environment. Uploaded figures expire after 24 hours unless pinned, so after uploading, record the URLs in `figures.json` and pin them with `.venv/bin/python tools/pin_figures.py papers/<paper key>/figures.json`.
+The figures use the `LinkedTrajectories` and `LinkedCurves` views of `figpack_experimental` (0.1.21 or later), which is published as a wheel on figpack's site rather than on PyPI; `requirements.txt` points pip there. Uploading needs `FIGPACK_API_KEY` in the environment. Uploaded figures expire after 24 hours unless pinned, so after uploading, record the URLs in `figures.json` and pin them with `.venv/bin/python tools/pin_figures.py papers/<paper key>/figures.json`.
