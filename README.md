@@ -1,0 +1,39 @@
+# Encore reports
+
+Readable overviews of what [Encore Science](https://encorescience.org/) found when it tried to reproduce published findings from their open data, with interactive figures made with [figpack](https://github.com/flatironinstitute/figpack).
+
+Encore records every claim of a paper, the outcome of each attempt to reproduce it, and what the attempt learned about the data. Those records are precise but long, and the registry has no figures. Each report here takes one paper, explains the question and the result for a reader who has not read the paper, and shows the data with one or more interactive figures computed with the attempt's own code.
+
+## Reports
+
+- [Churchland et al. (2012): rotational dynamics during reaching](papers/churchland-2012/)
+
+## Layout
+
+Each paper has a directory `papers/<paper key>/`, named by its Encore paper key, with:
+
+- `README.md`: the report.
+- `compute.py`: streams the data and caches what the figures need under `cache/` (not committed).
+- `fig_*.py`: one script per figure. Each saves the figure locally, or uploads it to the figpack cloud with `--upload` and prints its URL.
+- `figures.json`: the URL of each uploaded figure.
+- `images/`: a static PNG of each figure, made with `tools/snapshot.sh` from its URL.
+- Any code reused from the Encore entry, copied unchanged with its license.
+
+In a report, a figure is a linked image followed by a link that opens it in a new tab:
+
+```markdown
+[![Alt text](images/rotations.png)](https://figures.figpack.org/figures/default/<id>/index.html)
+
+[Open the interactive figure in a new tab](https://figures.figpack.org/figures/default/<id>/index.html)
+```
+
+GitHub does not render iframes in markdown, so on GitHub the image stands in for the figure. The GitHub Pages build will replace each image that links to a figpack figure with the embedded figure itself.
+
+## Setup
+
+```bash
+uv venv .venv
+uv pip install --python .venv/bin/python -r requirements.txt
+```
+
+The figures use views from `figpack_experimental`. Until the `LinkedTrajectories` view is released, install it from the figpack branch `linked-trajectories` (`extension_packages/figpack_experimental`, after `npm install && npm run build`). Uploading needs `FIGPACK_API_KEY` in the environment.

@@ -1,0 +1,9 @@
+dandi==0.81.0
+h5py==3.16.0
+numpy==2.5.4
+pandas==3.0.6
+remfile==0.1.15
+requests
+scipy==1.18.1
+matplotlib
+figpack==0.4.5
