@@ -8,3 +8,5 @@ scipy==1.18.1
 matplotlib
 figpack==0.4.5
 markdown==3.11.3
+psychofit==1.0.0.post0
+pyarrow

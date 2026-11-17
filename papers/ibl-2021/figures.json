@@ -1,0 +1,9 @@
+{
+  "mice": {
+    "script": "fig_mice.py",
+    "url": "https://figures.figpack.org/figures/default/5d84e99a92906f35b43203a2/index.html",
+    "height": 560,
+    "name": "IBL 2021: learning and psychometric curves of every mouse, by lab",
+    "description": "Encore report on IBL 2021: each mouse's learning curve and psychometric curves at basic and full task proficiency (DANDI:000045), colored by lab and linked by mouse."
+  }
+}

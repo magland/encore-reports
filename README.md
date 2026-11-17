@@ -9,6 +9,7 @@ Encore records every claim of a paper, the outcome of each attempt to reproduce 
 ## Reports
 
 - [Churchland et al. (2012): rotational dynamics during reaching](papers/churchland-2012/)
+- [The International Brain Laboratory (2021): standardized and reproducible decision-making in mice](papers/ibl-2021/)
 
 ## Layout
 
