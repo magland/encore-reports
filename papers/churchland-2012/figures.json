@@ -3,12 +3,14 @@
     "script": "fig_rotations.py",
     "url": "https://figures.figpack.org/figures/default/c8f6927c1a74c025ee81feda/index.html",
     "name": "Churchland 2012: jPCA rotations and hand paths (J-array)",
-    "description": "Encore report on Churchland et al. 2012: the first jPCA plane of the J-array session (DANDI:000070) next to each condition's mean hand path, linked by condition."
+    "description": "Encore report on Churchland et al. 2012: the first jPCA plane of the J-array session (DANDI:000070) next to each condition's mean hand path, linked by condition.",
+    "height": 650
   },
   "controls": {
     "script": "fig_controls.py",
     "url": "https://figures.figpack.org/figures/default/a3de3f0d8900fd8645817474/index.html",
     "name": "Churchland 2012: jPCA on the data and on the controls (J-array)",
-    "description": "Encore report on Churchland et al. 2012: jPCA fitted separately to the J-array data, shuffles 2 and 3, and a simulated velocity-tuned population, linked by condition."
+    "description": "Encore report on Churchland et al. 2012: jPCA fitted separately to the J-array data, shuffles 2 and 3, and a simulated velocity-tuned population, linked by condition.",
+    "height": 900
   }
 }

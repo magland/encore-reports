@@ -1,5 +1,7 @@
 # Encore reports
 
+Site: https://magland.github.io/encore-reports/
+
 Readable overviews of what [Encore Science](https://encorescience.org/) found when it tried to reproduce published findings from their open data, with interactive figures made with [figpack](https://github.com/flatironinstitute/figpack).
 
 Encore records every claim of a paper, the outcome of each attempt to reproduce it, and what the attempt learned about the data. Those records are precise but long, and the registry has no figures. Each report here takes one paper, explains the question and the result for a reader who has not read the paper, and shows the data with one or more interactive figures computed with the attempt's own code.
@@ -15,7 +17,7 @@ Each paper has a directory `papers/<paper key>/`, named by its Encore paper key,
 - `README.md`: the report.
 - `compute.py`: streams the data and caches what the figures need under `cache/` (not committed).
 - `fig_*.py`: one script per figure. Each saves the figure locally, or uploads it to the figpack cloud with `--upload` and prints its URL.
-- `figures.json`: the URL, name and short description of each uploaded figure.
+- `figures.json`: the URL, name, short description and embedded height of each uploaded figure.
 - `images/`: a static PNG of each figure, made with `tools/snapshot.sh` from its URL.
 - Any code reused from the Encore entry, copied unchanged with its license.
 
@@ -27,7 +29,7 @@ In a report, a figure is a linked image followed by a link that opens it in a ne
 [Open the interactive figure in a new tab](https://figures.figpack.org/figures/default/<id>/index.html)
 ```
 
-GitHub does not render iframes in markdown, so on GitHub the image stands in for the figure. The GitHub Pages build will replace each image that links to a figpack figure with the embedded figure itself.
+GitHub does not render iframes in markdown, so on GitHub the image stands in for the figure. The site at https://magland.github.io/encore-reports/ is built from the same markdown by `tools/build_site.py` (run by `.github/workflows/pages.yml` on every push to `main`): each image that links to a figpack figure is replaced by the embedded figure, at the `height` given for it in `figures.json` (default 650 px), and links to figures open in a new tab. To build it locally: `.venv/bin/python tools/build_site.py` (writes `_site/`).
 
 ## Setup
 
