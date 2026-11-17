@@ -10,6 +10,7 @@ Encore records every claim of a paper, the outcome of each attempt to reproduce 
 
 - [Churchland et al. (2012): rotational dynamics during reaching](papers/churchland-2012/)
 - [The International Brain Laboratory (2021): standardized and reproducible decision-making in mice](papers/ibl-2021/)
+- [Watson et al. (2016): does sleep even out cortical firing?](papers/watson-2016/)
 
 ## Layout
 
@@ -19,6 +20,7 @@ Each paper has a directory `papers/<paper key>/`, named by its Encore paper key,
 - `compute.py`: streams the data and caches what the figures need under `cache/` (not committed).
 - `fig_*.py`: one script per interactive figure. Each saves the figure locally, or uploads it to the figpack cloud with `--upload` and prints its URL.
 - `plot_static.py`: draws the static plots into `images/` with matplotlib.
+- For large data, the `compute*.py` scripts stream only what a figure needs and keep the figure's own data within a few hundred MB; the Watson report's whole-night figure (189 MB) is the largest so far.
 - `figures.json`: the URL, name, short description and embedded height of each uploaded figure.
 - `images/`: the static plots, and a PNG of each interactive figure made with `tools/snapshot.sh` from its URL.
 - Any code reused from the Encore entry, copied unchanged with its license.

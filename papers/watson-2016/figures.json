@@ -1,0 +1,9 @@
+{
+  "night": {
+    "script": "fig_night.py",
+    "url": "https://figures.figpack.org/figures/default/730b41191429901255ab76e7/index.html",
+    "height": 860,
+    "name": "Watson 2016: one night in rat frontal cortex",
+    "description": "Encore report on Watson et al. 2016: sleep states, spectrogram, LFP (4 shanks, 250 Hz) and spikes of 93 units over a 7.2 h session of DANDI:000041, zoomable from hours to milliseconds."
+  }
+}
