@@ -64,6 +64,17 @@ def main():
     )
     print(f"wrote {OUT} ({OUT.stat().st_size / 1e6:.1f} MB) in {time.time() - t0:.0f} s")
 
+    # the spike_times_index fault: the stored spike times of units 0 and 1, in file order, with
+    # the stored and corrected index (reach.fix_first_index corrects only the first entry)
+    assert s["index_stored"][1] == s["index_fixed"][1]
+    np.savez_compressed(
+        OUT.parent / "spike_index.npz",
+        times=np.concatenate([s["spikes"][0], s["spikes"][1]]),
+        index_stored=s["index_stored"][:2], index_fixed=s["index_fixed"][:2],
+        wraps=s["index_wraps"],
+        session_range=[tr.start_time.min(), tr.stop_time.max()],
+    )
+
     compute_controls(s, tr, sel, align, rates, n, kin, res)
     print(f"done in {time.time() - t0:.0f} s total")
 

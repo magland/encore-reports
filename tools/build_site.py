@@ -37,6 +37,7 @@ header.site a { color: var(--fg); font-weight: 600; text-decoration: none; }
 footer.site { border-top: 1px solid var(--line); margin-top: 48px; }
 main { max-width: 1100px; margin: 0 auto; padding: 8px 20px; }
 main > :not(figure) { max-width: 780px; }
+main > p:has(> img:only-child) { max-width: none; }
 a { color: var(--link); }
 h1 { font-size: 2em; line-height: 1.25; margin: 0.8em 0 0.5em; }
 h2 { margin-top: 1.8em; padding-bottom: 0.2em; border-bottom: 1px solid var(--line); }

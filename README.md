@@ -16,12 +16,13 @@ Each paper has a directory `papers/<paper key>/`, named by its Encore paper key,
 
 - `README.md`: the report.
 - `compute.py`: streams the data and caches what the figures need under `cache/` (not committed).
-- `fig_*.py`: one script per figure. Each saves the figure locally, or uploads it to the figpack cloud with `--upload` and prints its URL.
+- `fig_*.py`: one script per interactive figure. Each saves the figure locally, or uploads it to the figpack cloud with `--upload` and prints its URL.
+- `plot_static.py`: draws the static plots into `images/` with matplotlib.
 - `figures.json`: the URL, name, short description and embedded height of each uploaded figure.
-- `images/`: a static PNG of each figure, made with `tools/snapshot.sh` from its URL.
+- `images/`: the static plots, and a PNG of each interactive figure made with `tools/snapshot.sh` from its URL.
 - Any code reused from the Encore entry, copied unchanged with its license.
 
-In a report, a figure is a linked image followed by a link that opens it in a new tab:
+A report uses a static plot where interaction would add nothing (a histogram, a single comparison) and an interactive figpack figure where it lets the reader see something a still image cannot, such as following one item across panels or through time. A static plot is an ordinary image in the markdown, with its caption in italics below it. An interactive figure is a linked image followed by a link that opens it in a new tab:
 
 ```markdown
 [![Alt text](images/rotations.png)](https://figures.figpack.org/figures/default/<id>/index.html)

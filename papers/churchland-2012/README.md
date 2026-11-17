@@ -2,7 +2,7 @@
 
 Churchland MM, Cunningham JP, Kaufman MT, Foster JD, Nuyujukian P, Ryu SI, Shenoy KV (2012). Neural population dynamics during reaching. *Nature* 487:51-56. [doi:10.1038/nature11129](https://doi.org/10.1038/nature11129)
 
-[Encore Science](https://encorescience.org/) is a registry in which AI agents try to reproduce the key findings of published papers from their open data, and independent agents check each attempt. This report summarizes the Encore attempt on this paper ([its page on the registry](https://encorescience.org/papers/churchland-2012/)) and adds two interactive figures, computed with the attempt's own code, that show the paper's central result and its controls in the deposited data. The report is organized as follows. First we describe what the paper claims and what data are available. Next we present the main figure and how to read it. Finally we go through which findings reproduced, which did not (with a second figure that sets the data beside the paper's controls), and what the attempt found about the data along the way.
+[Encore Science](https://encorescience.org/) is a registry in which AI agents try to reproduce the key findings of published papers from their open data, and independent agents check each attempt. This report summarizes the Encore attempt on this paper ([its page on the registry](https://encorescience.org/papers/churchland-2012/)) and adds figures computed with the attempt's own code: two interactive figures that show the paper's central result and its controls in the deposited data, and two static plots, one of a measure the paper uses and one of a fault in the files. The report is organized as follows. First we describe what the paper claims and what data are available. Next we present the main figure and how to read it. Finally we go through which findings reproduced, which did not (with a second figure that sets the data beside the paper's controls), and what the attempt found about the data along the way.
 
 An outcome in Encore describes what one attempt could recover from the deposited data with the methods available to it. A finding that did not reproduce is not a finding that the paper is wrong.
 
@@ -70,6 +70,14 @@ The two shuffles keep the rotations for different reasons. Shuffle 2 inverts the
 
 **The kinematic models.** The paper simulates populations of units tuned to hand velocity, or to a richer set of kinematic variables, and reports that they show no robust rotations. In the attempt the main part of this claim holds: the rotational model fits the simulated populations poorly (ratios of 0.08 to 0.36, against 0.85 to 0.91 for the data). The velocity model in Figure 2 makes the distinction visible. Its curves are large loops, but they turn both ways (68 of 108 counter-clockwise), and no single rotation describes them all; curved trajectories alone do not amount to rotational dynamics. What failed is the angle between the state and its derivative, which the paper reports peaking near zero for the models and which here peaked between 0.36 pi and 0.86 pi. The attempt shows that this peak depends on choices the paper's Methods leave open, such as how far neural activity leads the hand and how preparatory tuning decays, so this outcome says more about how the models were specified than about the data.
 
+### Figure 3: the angle between the state and its derivative
+
+![Histograms of the angle between the neural state and its derivative in the first jPCA plane, for the data, shuffles 2 and 3, and the velocity model](images/angles.png)
+
+*Figure 3. The angle between the state and its derivative in the first jPCA plane, over all conditions and times of the fitted window, for the J-array data and the three controls of Figure 2 (36 bins, as in the attempt; the triangle marks the tallest bin). The dashed line is pi/2. The shaded band in the last panel, 0 to pi/4, is where the attempt's criterion required the model's peak to fall.*
+
+This is the measure of the paper's Figure 6a. If the state rotates about the origin, it moves at right angles to itself and the angle is near pi/2; if it decays toward the origin the angle is near pi, and if it moves straight outward it is near 0. The data peak at 0.53 pi, within the range the paper reports for its datasets (about 0.35 pi to 0.6 pi, read from its figure). The figure adds two things to the outcomes above. First, shuffles 2 and 3 also peak near pi/2 (0.53 pi and 0.58 pi), so this measure, like the rotational fit, does not separate the data from those two controls. Second, the velocity model's distribution is broad and peaks at 0.81 pi, far from the near-zero peak the paper reports for its kinematic models, which is the outcome recorded as not reproduced. A peak between pi/2 and pi would be expected from a mixture of rotation and decay, and in the attempt's model the preparatory tuning decays from movement onset; this is consistent with the attempt's finding that the peak depends on how the model is specified.
+
 **Three jPCA planes in J-array.** The paper's supplement reports that three planes capture 22, 19 and 12% of the J-array variance. Here they capture 12, 15 and 13%. The attempt suggests, without testing it, that the per-electrode units, which are noisier than sorted isolations, and the smoothing step the attempt left out may account for the difference.
 
 ## What could not be tested
@@ -86,16 +94,21 @@ Along the way the attempt recorded several problems with the files themselves. T
 - **Units that are not neurons.** The units table does not say what its units are. Their number (one per electrode) and firing rates (8.8 to 300 spikes/s) indicate threshold crossings or multi-unit activity, not the sorted isolations the paper analysed.
 - **Undocumented sessions.** The dandiset does not say which of its ten sessions are the paper's datasets; two match by date. The conversion also set the year of every session of the first conversion to 2009, so one file dated 2009-09-10 appears to be a 2010 session that matches a dataset in the paper's supplement.
 
+![Stored spike times of units 0 and 1 of the J-array file against their position in the file, with the stored and the true end of unit 0 marked](images/spike_index.png)
+
+*Figure 4. The spike index fault in the J-array file. The spike times of units 0 and 1 are plotted in the order they are stored. Within a unit the times increase through the session, so each unit appears as a rising line. The stored index ends unit 0 at position 61,030 (dashed line), but the times keep rising past it to the end of the session and drop back to its start only at position 257,638 (solid line). That position is 61,030 + 3 × 65,536, the true end of unit 0. Read with the stored index, the shaded spikes, about three quarters of unit 0, become the first part of unit 1, whose times then run from late in the session back to its start.*
+
 The attempt's loader corrects the first two problems, and the figures above use that loader unchanged.
 
-## Reproducing the figures
+## Reproducing the figures and plots
 
-The figures are generated by the scripts in this directory. `reach.py` is the loader, jPCA and control code of the Encore entry, copied unchanged from [`entries/churchland-2012/reach.py`](https://github.com/catalystneuro/encore/blob/46e05a1ca5a59bc7018f93fa5708c4b20b0a8c30/entries/churchland-2012/reach.py). `compute.py` streams the J-array session from DANDI and caches the condition-averaged rates, the jPCA projections, the hand paths and the three controls (about a minute in all). `fig_rotations.py` and `fig_controls.py` build Figures 1 and 2 with the `LinkedTrajectories` view of [figpack](https://github.com/flatironinstitute/figpack). From the repository root:
+The figures are generated by the scripts in this directory. `reach.py` is the loader, jPCA and control code of the Encore entry, copied unchanged from [`entries/churchland-2012/reach.py`](https://github.com/catalystneuro/encore/blob/46e05a1ca5a59bc7018f93fa5708c4b20b0a8c30/entries/churchland-2012/reach.py). `compute.py` streams the J-array session from DANDI and caches the condition-averaged rates, the jPCA projections, the hand paths and the three controls (about a minute in all). `fig_rotations.py` and `fig_controls.py` build the interactive Figures 1 and 2 with the `LinkedTrajectories` view of [figpack](https://github.com/flatironinstitute/figpack), and `plot_static.py` draws the static Figures 3 and 4 into `images/`. From the repository root:
 
 ```bash
 .venv/bin/python papers/churchland-2012/compute.py
 .venv/bin/python papers/churchland-2012/fig_rotations.py --upload
 .venv/bin/python papers/churchland-2012/fig_controls.py --upload
+.venv/bin/python papers/churchland-2012/plot_static.py
 ```
 
 The cached values match the attempt's. For the data: 20.0% of variance in the first plane, 102 of 108 conditions counter-clockwise, R2 ratios of 0.905 (6-D) and 0.957 (plane), and an angle peak at 0.53 pi. For the controls: shuffle 2 keeps 71% of the data's rotational fit, the median shuffle 3 runs keep 81 to 82%, and the velocity model has a fit ratio of 0.361, an angle peak at 0.81 pi and 63% of conditions counter-clockwise.
