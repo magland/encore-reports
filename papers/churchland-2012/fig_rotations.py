@@ -34,6 +34,13 @@ def darken(rgba, max_lightness=0.5):
     return matplotlib.colors.to_hex(colorsys.hls_to_rgb(h, min(l, max_lightness), s))
 
 
+def condition_colors(d):
+    """One color per condition, by the preparatory state along jPC1 at -50 ms (paper's Fig. 3)."""
+    x0 = d["planes"][0][:, 0, 0]
+    cmap = matplotlib.colormaps["RdYlGn_r"]
+    return [darken(cmap(v)) for v in (x0 - x0.min()) / np.ptp(x0)]
+
+
 def main():
     d = np.load(CACHE / "j_array.npz")
     t = d["long_times_ms"]
@@ -41,10 +48,7 @@ def main():
     hand_idx = t - d["hand_times_ms"][0]
     hand = d["hand_pos_mm"][:, hand_idx, :]                  # cond x time x 2
 
-    # color by the preparatory state along jPC1 at the start of the fitted window
-    x0 = d["planes"][0][:, 0, 0]
-    cmap = matplotlib.colormaps["RdYlGn_r"]
-    colors = [darken(cmap(v)) for v in (x0 - x0.min()) / np.ptp(x0)]
+    colors = condition_colors(d)
     rot = np.degrees(d["net_rotation"])
     labels = [f"condition {c} ({n} trials), net rotation {r:+.0f} deg"
               for c, n, r in zip(d["condition"], d["n_trials"], rot)]

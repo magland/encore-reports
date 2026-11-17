@@ -62,7 +62,56 @@ def main():
         endpoint_mm=kin["endpoint"] * 1000,
         **{f"summary_{k}": v for k, v in summ.items()},
     )
-    print(f"wrote {OUT} ({OUT.stat().st_size / 1e6:.1f} MB) in {time.time() - t0:.0f} s total")
+    print(f"wrote {OUT} ({OUT.stat().st_size / 1e6:.1f} MB) in {time.time() - t0:.0f} s")
+
+    compute_controls(s, tr, sel, align, rates, n, kin, res)
+    print(f"done in {time.time() - t0:.0f} s total")
+
+
+def compute_controls(s, tr, sel, align, rates, n, kin, res):
+    """The attempt's shuffle 2, its median shuffle 3 run and its velocity model, for J-array.
+
+    The attempt drew its controls from fixed seeds, J-array first (notebook cells 20 and 63),
+    so the same runs are replayed here: shuffle seed 7012 is consumed by the 20 runs of
+    shuffle 1, shuffle 2 uses no random numbers, then the 20 runs of shuffle 3 follow; the
+    velocity model with a 100 ms lead is the first draw from seed 7016.
+    """
+    go_rel = np.median((tr.go_cue_time.values - tr.move_begins_time.values)[sel]) * 1000
+    t0_ms = int(round(go_rel + 50))
+    t0_index = t0_ms - reach.WINDOW_MS[0]
+    rng = np.random.default_rng(7012)
+    for _ in range(20):                                          # shuffle 1 draws, not needed here
+        rng.random((rates.shape[0], 1, rates.shape[2]))
+    sources = {"shuffle 2": reach.shuffle_rates(rates, t0_index, 2, rng)}
+    states, r2s = [], []
+    for _ in range(20):
+        states.append(rng.bit_generator.state)                    # to replay the chosen run
+        r2s.append(reach.jpca(reach.shuffle_rates(rates, t0_index, 3, rng))["r2_skew"])
+    r2s = np.array(r2s)
+    median_run = int(np.argsort(r2s)[len(r2s) // 2])
+    replay = np.random.default_rng()
+    replay.bit_generator.state = states[median_run]
+    sources["shuffle 3"] = reach.shuffle_rates(rates, t0_index, 3, replay)
+    sources["velocity model"] = reach.simulate_population(
+        "velocity", kin, rates, n, np.random.default_rng(7016), lead_ms=100)
+
+    out = {"t0_ms": t0_ms, "shuffle3_run": median_run,
+           "shuffle3_r2_skew_all": r2s, "data_r2_skew": res["r2_skew"]}
+    for name, src in sources.items():
+        r = reach.jpca(src)
+        key = name.replace(" ", "_")
+        tf = dict(r["transform"], times_ms=LONG_TIMES_MS)
+        out[f"{key}_proj_long"] = reach.project(src, dict(r, transform=tf), plane=0).astype(np.float32)
+        out[f"{key}_plane"] = r["planes"][0].astype(np.float32)
+        out[f"{key}_net_rotation"] = reach.net_rotation(r["planes"][0])
+        for k, v in reach.summary(r).items():
+            out[f"{key}_summary_{k}"] = v
+        print(name, {k: round(float(v), 3) for k, v in reach.summary(r).items()
+                     if k in ("r2_skew", "r2_ratio_6d", "angle_peak", "frac_ccw", "plane_var")})
+    print(f"dividing point {t0_ms} ms; shuffle 3 median run {median_run}; "
+          f"R2(M_skew) data {res['r2_skew']:.3f}, shuffle 3 runs {np.median(r2s):.3f} median")
+    np.savez_compressed(OUT.parent / "controls.npz", **out)
+    print(f"wrote {OUT.parent / 'controls.npz'}")
 
 
 if __name__ == "__main__":
