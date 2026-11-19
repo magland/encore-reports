@@ -1,9 +1,9 @@
 {
   "session": {
     "script": "fig_session.py",
-    "url": "https://figures.figpack.org/figures/default/87662d4b335c6fb6c2febc4a/index.html",
+    "url": "https://figures.figpack.org/figures/default/5df05e1093318696ccdc8f42/index.html",
     "height": 820,
     "name": "Peyrache 2015: head-direction cells awake and asleep",
-    "description": "Encore report on Peyrache et al. 2015: sleep states, tracked head direction, the direction decoded from 15 thalamic cells, and spikes of 24 head-direction cells over a 7.9 h session of DANDI:000056."
+    "description": "Encore report on Peyrache et al. 2015: head-direction cells on a ring at their preferred directions, with states, tracked and decoded head direction and spikes over a 7.9 h session of DANDI:000056."
   }
 }

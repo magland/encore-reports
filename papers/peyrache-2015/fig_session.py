@@ -14,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 import figpack.views as fv
+from figpack_experimental.views import RingRaster
 from figpack_spike_sorting.views import RasterPlot, RasterPlotItem
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,10 +56,30 @@ def main():
                             spike_times_sec=spikes[i]) for i in order]
     raster = RasterPlot(start_time_sec=0.0, end_time_sec=t_end, plots=items)
 
-    view = fv.Box(direction="vertical", items=[
+    # the 24 cells on a ring at their preferred directions, at the current time of the timeline
+    ring = RingRaster(unit_ids=[f"{d['region'][i]} {int(d['unit'][i])}" for i in order],
+                      angles_deg=np.degrees(d["pref"][order]), spike_times_sec=[spikes[i] for i in order],
+                      unit_colors=["#6250d6"] * len(order), start_time_sec=0.0, end_time_sec=t_end,
+                      flash_sec=0.1, playback_speed=1.0)
+    w = d["state_wake"]
+    ok = np.isfinite(d["hd"]) & (d["hd_t"] >= w[0, 0]) & (d["hd_t"] < w[-1, 1])
+    ring.add_needle(name="head direction (camera)", t=d["hd_t"][ok], angle_deg=np.degrees(d["hd"][ok]),
+                    color="#0b0b0b")
+    dt = np.concatenate([d[f"dec_t_{k}"] for k in ("wake", "SWS", "REM")])
+    da = np.concatenate([d[f"dec_{k}"] for k in ("wake", "SWS", "REM")])
+    o = np.argsort(dt)
+    ring.add_needle(name="decoded from the 15 thalamic cells", t=dt[o], angle_deg=np.degrees(da[o]),
+                    color="#1baf7a", max_gap_sec=0.02)
+
+    tracks = fv.Box(direction="vertical", items=[
         fv.LayoutItem(states, stretch=1.2, title="States and tracked head direction"),
         fv.LayoutItem(decoded, stretch=1.4, title="Direction decoded from the 15 thalamic cells (posterior)"),
         fv.LayoutItem(raster, stretch=2.0, title="Spikes of the 24 head-direction cells, by preferred direction"),
+    ])
+    view = fv.Box(direction="horizontal", items=[
+        fv.LayoutItem(ring, stretch=1, min_size=300, max_size=480,
+                      title="The 24 cells at their preferred directions"),
+        fv.LayoutItem(tracks, stretch=2.5),
     ])
     description = f"""\
 One session of DANDI:000056 (Mouse28-140313, {t_end / 3600:.1f} h), from the data of Peyrache et

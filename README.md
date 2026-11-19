@@ -47,4 +47,4 @@ uv venv .venv
 uv pip install --python .venv/bin/python -r requirements.txt
 ```
 
-The figures use the `LinkedTrajectories` and `LinkedCurves` views of `figpack_experimental` (0.1.21 or later), which is published as a wheel on figpack's site rather than on PyPI; `requirements.txt` points pip there. Uploading needs `FIGPACK_API_KEY` in the environment. Uploaded figures expire after 24 hours unless pinned, so after uploading, record the URLs in `figures.json` and pin them with `.venv/bin/python tools/pin_figures.py papers/<paper key>/figures.json`.
+The figures use the `LinkedTrajectories`, `LinkedCurves` and `RingRaster` views of `figpack_experimental` (0.1.22 or later), which is published as a wheel on figpack's site rather than on PyPI; `requirements.txt` points pip there. Uploading needs `FIGPACK_API_KEY` in the environment. Uploaded figures expire after 24 hours unless pinned, so after uploading, record the URLs in `figures.json` and pin them with `.venv/bin/python tools/pin_figures.py papers/<paper key>/figures.json`.

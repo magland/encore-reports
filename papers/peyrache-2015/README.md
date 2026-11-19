@@ -42,19 +42,19 @@ These windows are three examples. The interactive figure below shows the whole s
 
 ## Figure 1: the whole session, interactive
 
-[![States, tracked head direction, decoded direction and spikes over a 7.9 hour session](images/session.png)](https://figures.figpack.org/figures/default/87662d4b335c6fb6c2febc4a/index.html)
+[![The 24 cells on a ring at their preferred directions, beside the states, tracked head direction, decoded direction and spikes of a 7.9 hour session](images/session.png)](https://figures.figpack.org/figures/default/5df05e1093318696ccdc8f42/index.html)
 
-[Open the interactive figure in a new tab](https://figures.figpack.org/figures/default/87662d4b335c6fb6c2febc4a/index.html)
+[Open the interactive figure in a new tab](https://figures.figpack.org/figures/default/5df05e1093318696ccdc8f42/index.html)
 
-**What it shows.** The whole 7.9 hour session. Three tracks share one time axis:
+**What it shows.** The whole 7.9 hour session. On the left, the 24 head-direction cells sit on a ring at their preferred directions, as in the tuning curves above, and each dot flashes when its cell spikes. Two needles point to the head direction tracked by the camera (black, waking only) and to the direction decoded from the 15 ADn cells (aqua). The ring shows a single moment, the current time of the three tracks on the right, which share one time axis:
 
 1. The scored states (waking gray, slow-wave sleep blue, REM sleep orange) and the head direction tracked by the camera. The tracking is shown in waking only; the file holds an LED angle for the whole session, but in the home cage it changes by about 30° per second while the mouse sleeps, presumably from tracking noise, and the attempt also uses waking only.
 2. The decoded direction as a *posterior*: for each 50 ms and each 6° of direction, how probable the decoder finds that direction given the spikes of the 15 ADn cells (bright is probable). It is computed in the scored states only, with the attempt's smoothing (300 ms in waking and REM, 50 ms in slow-wave sleep).
 3. The spikes of the 24 head-direction cells, one row per cell, in order of preferred direction, labelled with region, unit number and preferred direction.
 
-**How to use it.** Zooming or panning in any track moves all three. The magnifier buttons zoom in and out; in "Select" mode, dragging across a stretch of time zooms to it, and the house button returns to the whole session. The figure holds 89 MB, but each track is stored at several resolutions and loads only what the current view needs.
+**How to use it.** Clicking a time in any track sets the current time and shows the ring at that moment. **Play**, below the ring, runs time forward at the chosen speed (1× is real time; 0.1× slows it down tenfold), and the tracks follow; if the tracks show the whole session, Play first zooms them to about 30 s. Zooming or panning in any track moves all three: the magnifier buttons zoom in and out, in "Select" mode dragging across a stretch of time zooms to it, and the house button returns to the whole session. The figure holds about 105 MB, but each track is stored at several resolutions, and the ring stores its spikes in 10 s blocks, so the viewer loads only what the current view needs.
 
-**What to look for.** At the scale of the whole session there is little to see; the result appears at the scale of seconds. Zoom into the waking period (from 1 h 33 min to 2 h 11 min) to see the bright band of the posterior lie on the tracked head direction and the spikes move from row to row as the head turns. Then zoom into any REM episode, for example the one at 3 h 37 min (the middle panel above), or slow-wave sleep, for example at 9 min. The posterior remains a narrow band that moves, although there is no head movement to follow.
+**What to look for.** At the scale of the whole session there is little to see; the result appears at the scale of seconds. Click in the waking period (from 1 h 33 min to 2 h 11 min) and press Play: the flashing cells form a group on one side of the ring that turns with the black needle, and the aqua needle follows it. Then click in a REM episode, for example the one at 3 h 37 min (the middle panel above), and press Play. The black needle is gone, because the head is still and not tracked, but the group of flashing cells and the aqua needle keep turning around the ring, much as in waking. In slow-wave sleep, for example at 9 min, the group jumps around the ring faster, and 0.1× shows its course more clearly. In the tracks, the same activity appears as a bright band in the posterior and as diagonal stripes in the spikes.
 
 ## The cells keep their relationships during sleep
 
@@ -96,7 +96,7 @@ A failure to reproduce in Encore describes what one attempt could recover from t
 
 ## Reproducing the figures and plots
 
-`hd.py` is the loading and analysis module of the Encore entry, copied unchanged from [`entries/peyrache-2015/hd.py`](https://github.com/catalystneuro/encore/blob/a81ed60ba3e1ddcd77aeb9e69f01c0c29fc91bb3/entries/peyrache-2015/hd.py). `compute.py` streams the session's units, head direction and sleep states (about 30 s), classifies the head-direction cells, computes their tuning curves, decodes the direction in every state with the attempt's decoder, and computes the posterior over the whole session for Figure 1. `fig_session.py` builds Figure 1 from figpack's existing views (TimeseriesGraph, Spectrogram and the spike-sorting RasterPlot), and `plot_static.py` draws the static plots into `images/`. From the repository root:
+`hd.py` is the loading and analysis module of the Encore entry, copied unchanged from [`entries/peyrache-2015/hd.py`](https://github.com/catalystneuro/encore/blob/a81ed60ba3e1ddcd77aeb9e69f01c0c29fc91bb3/entries/peyrache-2015/hd.py). `compute.py` streams the session's units, head direction and sleep states (about 30 s), classifies the head-direction cells, computes their tuning curves, decodes the direction in every state with the attempt's decoder, and computes the posterior over the whole session for Figure 1. `fig_session.py` builds Figure 1 from the RingRaster view of `figpack_experimental`, written for this report, and figpack's existing views (TimeseriesGraph, Spectrogram and the spike-sorting RasterPlot), and `plot_static.py` draws the static plots into `images/`. From the repository root:
 
 ```bash
 .venv/bin/python papers/peyrache-2015/compute.py
