@@ -11,6 +11,7 @@ Encore records every claim of a paper, the outcome of each attempt to reproduce 
 - [Churchland et al. (2012): rotational dynamics during reaching](papers/churchland-2012/)
 - [The International Brain Laboratory (2021): standardized and reproducible decision-making in mice](papers/ibl-2021/)
 - [Watson et al. (2016): does sleep even out cortical firing?](papers/watson-2016/)
+- [Peyrache et al. (2015): the brain's compass keeps turning during sleep](papers/peyrache-2015/)
 
 ## Layout
 
